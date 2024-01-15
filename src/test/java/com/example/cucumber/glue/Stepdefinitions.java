@@ -1,7 +1,6 @@
 package com.example.stepdefinitions;
 
 import com.example.BookingFacade;
-import com.example.SpringBootCrudApplication;
 import com.example.entity.Event;
 import com.example.entity.Ticket;
 import com.example.entity.User;
@@ -10,21 +9,19 @@ import com.example.service.EventService;
 import com.example.service.TicketService;
 import com.example.service.UserAccountService;
 import com.example.service.UserService;
+import io.cucumber.java.Before;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import io.cucumber.spring.CucumberContextConfiguration;
 import org.junit.Assert;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 
 import java.math.BigDecimal;
 import java.util.Optional;
 
-@CucumberContextConfiguration
-@SpringBootTest(classes = SpringBootCrudApplication.class)
-public class MyStepdefinitions {
+
+public class Stepdefinitions {
 
     @Autowired
     UserService userService;
@@ -45,8 +42,23 @@ public class MyStepdefinitions {
     private Event event;
     int seat;
 
-    public MyStepdefinitions(UserService userService) {
+    public Stepdefinitions(UserService userService) {
         this.userService = new UserService();
+    }
+
+
+    @Before
+    public void setUp() {
+        User  user = new User();
+        user.setName("John");
+        user.setEmail("john@example.com");
+        userService.createUser(user);
+
+        Event  event = new Event();
+        event.setTitle("Concert");
+        event.setLocation("Terrace Centr");
+        event.setTicketPrice(BigDecimal.valueOf(50));
+        eventService.createEvent(event);
     }
 
     @And("an event titled {string} with a ticket price of ${int}")
